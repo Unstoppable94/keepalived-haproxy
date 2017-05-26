@@ -1,0 +1,21 @@
+version: '2'
+services:
+
+    keepalived_haproxy:
+        image: 10.0.2.50/winhong/docker-keepalived-haproxy:20170522 
+        volumes:
+            - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+#            - /keepalived:/keepalived
+            - /var/run/docker.sock:/var/run/docker.sock
+#            - /root/.docker:/root/.docker
+        environment:
+            INTERFACE: "ens32"
+            STATE: "MASTER"
+            VIRTUAL_ROUTER_ID: "51"
+            PRIORITY: "100"
+            VIRTUAL_IP: "192.168.101.200"
+            VIRTUAL_MASK: "24"
+        command: [-f, /usr/local/etc/haproxy/haproxy.cfg]
+#        restart: always
+        network_mode: host
+        privileged: true

@@ -1,0 +1,26 @@
+version: '2'
+services:
+  Keepalived:
+   environment:
+     VIRTUAL_IP: "192.168.101.200"
+     CHECK_PORT: "8090"
+     VRID: 150
+     INTERFACE: "ens32"
+     NETMASK_BIT: "24"
+   tty: true
+   image: winhong/cibkeepalived:v1
+   volumes:
+     - ./keepalived.conf:/etc/keepalived/keepalived.conf  
+   stdin_open: true
+   network_mode: "host" 
+   cap_add:
+     - NET_ADMIN
+     - NET_BROADCAST
+  hproxy:
+    image: haproxy:1.7.3
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    ports:
+      - 8090:8090
+    network_mode: "host" 
+    
